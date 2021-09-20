@@ -71,6 +71,16 @@ def sigmoid(x):
     return 1.0 / (1.0 + math.exp(-x)) if x >= 0 else math.exp(x) / (1 + math.exp(x))
 
 
+def sigmoid_back(x, d_output=1):
+    """
+    Derivative of sigmoid:
+    f(x) = 1 / (1 + e^(-x))
+    f'(x) = e^(x) / (1 + e^x)^2
+    Notice that f'(x) is even
+    """
+    return d_output * math.exp(x) / (1 + math.exp(x)) ** 2
+
+
 def relu(x):
     """
     :math:`f(x) =` x if x is greater than 0, else 0
