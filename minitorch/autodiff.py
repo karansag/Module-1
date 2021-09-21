@@ -211,10 +211,9 @@ class FunctionBase:
                 raw_vals.append(v)
         ctx = Context(not need_grad)
         c = cls.forward(ctx, *raw_vals)
-        assert isinstance(c, cls.data_type), "Expected return typ %s got %s" % (
-            cls.data_type,
-            type(c),
-        )
+        assert isinstance(
+            c, cls.data_type
+        ), "Expected return typ %s got %s for value %s" % (cls.data_type, type(c), c,)
         back = None
         if need_grad:
             back = History(cls, ctx, vals)
@@ -235,8 +234,10 @@ class FunctionBase:
             (see `is_constant` to remove unneeded variables)
 
         """
-        # TODO: Implement for Task 1.3.
-        raise NotImplementedError('Need to implement for Task 1.3')
+        derivs = wrap_tuple(cls.backward(ctx, d_output))
+        return [
+            (var, deriv) for (var, deriv) in zip(inputs, derivs) if not is_constant(var)
+        ]
 
 
 def is_constant(val):
