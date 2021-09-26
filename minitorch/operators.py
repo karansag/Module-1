@@ -27,7 +27,7 @@ def add(x, y):
 
 def neg(x):
     ":math:`f(x) = -x`"
-    return -x
+    return -1.0 * x
 
 
 def lt(x, y):
@@ -78,7 +78,7 @@ def sigmoid_back(x, d_output=1):
     f'(x) = e^(x) / (1 + e^x)^2
     Notice that f'(x) is even
     """
-    return d_output * math.exp(x) / (1 + math.exp(x)) ** 2
+    return d_output * math.exp(-x) / (1 + math.exp(-2 * x) + 2 * math.exp(-x))
 
 
 def relu(x):
@@ -93,7 +93,7 @@ def relu(x):
     Returns:
         float : relu value
     """
-    return x if x > 0 else 0
+    return x if x > 0 else 0.0
 
 
 EPS = 1e-6
@@ -121,7 +121,7 @@ def inv(x):
 
 def inv_back(x, d):
     r"If :math:`f(x) = 1/x` compute d :math:`d \times f'(x)`"
-    return d / x ** 2
+    return -d / x ** 2
 
 
 def relu_back(x, d):

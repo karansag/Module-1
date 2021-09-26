@@ -22,9 +22,15 @@ def central_difference(f, *vals, arg=0, epsilon=1e-6):
     Returns:
         float : An approximation of :math:`f'_i(x_0, \ldots, x_{n-1})`
     """
-    point_above = vals[:arg] + [vals[arg] + epsilon] + vals[arg + 1 :]
-    point_below = vals[:arg] + [vals[arg] - epsilon] + vals[arg + 1 :]
-    return (f(point_above) - f(point_below)) / (2 * epsilon)
+    point_above = (
+        tuple(vals[:arg]) + tuple([vals[arg] + epsilon]) + tuple(vals[arg + 1 :])
+    )
+    point_below = (
+        tuple(vals[:arg]) + tuple([vals[arg] - epsilon]) + tuple(vals[arg + 1 :])
+    )
+
+    ans = (f(*point_above) - f(*point_below)) / (2 * epsilon)
+    return ans
 
 
 # ## Task 1.2 and 1.4

@@ -60,7 +60,7 @@ class Module:
 
     def parameters(self):
         "Enumerate over all the parameters of this module and its descendents."
-        return iter(self.named_parameters())
+        return [x[1] for x in self.named_parameters()]
 
     def add_parameter(self, k, v):
         """
