@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 variable_count = 1
 
 
@@ -276,5 +278,15 @@ def backpropagate(variable, deriv):
 
     No return. Should write to its results to the derivative values of each leaf.
     """
-    # TODO: Implement for Task 1.4.
-    raise NotImplementedError('Need to implement for Task 1.4')
+    nodes = topological_sort(variable)
+    derivs = defaultdict(lambda: 0)
+    derivs[variable.unique_id] = deriv
+
+    for n in nodes:
+        if n.is_leaf():
+            n.accumulate_derivative(derivs[n.unique_id])
+        else:
+            deriv_output = derivs[n.unique_id]
+            derivative_values = n.history.backprop_step(deriv_output)
+            for inp, deriv_value in derivative_values:
+                derivs[inp.unique_id] += deriv_value
