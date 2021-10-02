@@ -12,14 +12,21 @@ class Network(minitorch.Module):
         self.hidden_layers = []
         for x in range(num_hidden_layers):
             self.hidden_layers.append(Linear(2, 2))
-        self.layer1 = self.hidden_layers[0]
-        self.layer2 = self.hidden_layers[1]
-        self.layer3 = Linear(2, 1)
+        self.final_layer = Linear(2, 1)
+        # self.layer1 = self.hidden_layers[0]
+        # self.layer2 = self.hidden_layers[1]
+        # self.layer1 = Linear(2, 3)
+        # self.layer2 = Linear(3, 3)
+        # self.layer3 = Linear(3, 1)
 
     def forward(self, x):
-        middle = [h.relu() for h in self.layer1.forward(x)]
-        end = [h.relu() for h in self.layer2.forward(middle)]
-        return self.layer3.forward(end)[0].sigmoid()
+        next_item = x
+        for layer in self.hidden_layers:
+            next_item = [h.relu() for h in layer.forward(next_item)]
+        return self.final_layer.forward(next_item)[0].sigmoid()
+        # middle = [h.relu() for h in self.layer1.forward(x)]
+        # end = [h.relu() for h in self.layer2.forward(middle)]
+        # return self.layer3.forward(end)[0].sigmoid()
 
 
 class Linear(minitorch.Module):
@@ -52,8 +59,7 @@ class Linear(minitorch.Module):
                 output_weight.append(self.weights[i][j].value * inputs[i])
             outputs.append(sum(output_weight) + self.bias[j].value)
 
-        out = list(reversed(outputs))
-        return out
+        return outputs
 
 
 def default_log_fn(epoch, total_loss, correct, losses):
